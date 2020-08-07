@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import {addBook, clearNewBook} from '../../actions';
+
 
 class AddBook extends Component {
 
@@ -24,9 +28,28 @@ class AddBook extends Component {
     })
   }
 
-  submitForm =(e)=>{
+  showNewBook =(book)=>(
+    book.post ?
+      <div className="conf_link">
+        cool!! <Link to={`/books/${book.bookId}`}>
+          Click The link to see the post
+        </Link>
+      </div>
+    :null
+  )
+
+  submitForm = (e) => {
     e.preventDefault();
+    this.props.dispatch(addBook({
+      ...this.state.formdata,
+      ownerId:this.props.user.login.id
+
+    }))
     
+  }
+
+  componentWillUnmount(){
+     this.props.dispatch(clearNewBook())
   }
 
   render() {
@@ -84,12 +107,24 @@ class AddBook extends Component {
               onChange={(event)=>this.handleInput(event,'price')}
             />
           </div>
-
+ 
           <button type="submit">Add review</button>
+          {
+            this.props.books.newbook ?
+              this.showNewBook(this.props.books.newbook)
+            :null
+          }
         </form>
       </div>
     );
   }
 }
 
-export default AddBook;
+function mapStateToProps (state){
+  
+  return {
+   books:state.books
+  }
+}
+
+export default connect(mapStateToProps)(AddBook)

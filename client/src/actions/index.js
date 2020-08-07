@@ -1,5 +1,4 @@
 import axios from 'axios';
-// import { response } from 'express';
 
 export function getBooks(
   limit= 10,
@@ -55,6 +54,34 @@ export function clearBookWithReviewer(){
       book:{},
       reviewer:{}
     }
+  }
+}
+
+export function addBook(book){
+  const request = axios.post('/api/book',book)
+                 .then(response => response.data)
+  
+  return {
+    type:'ADD_BOOK',
+    payload:request
+  }
+
+}
+
+export function clearNewBook (){
+  return{
+    type: 'CLEAR_NEWBOOK',
+    payload:{}
+  }
+}
+
+export function getUserPosts (userId){
+  const request = axios.get(`/api/user_posts?user=${userId}`)
+                  .then(response => response.data)
+
+  return {
+    type: 'GET_USER_POSTS',
+    payload:request
   }
 }
 

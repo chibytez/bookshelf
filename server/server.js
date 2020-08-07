@@ -74,7 +74,7 @@ app.get('/api/users',(req,res)=>{
 })
 
 app.get('/api/user_posts',(req,res)=>{
-  Book.find({owerId:req.query.user}).exec((err,docs)=>{
+  Book.find({ownerId:req.query.user}).exec((err,docs)=>{
     if(err) return res.status(400).send(err);
     res.send(docs)
   })
